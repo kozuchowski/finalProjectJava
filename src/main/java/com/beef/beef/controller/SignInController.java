@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/signin")
 public class SignInController {
@@ -29,7 +32,8 @@ public class SignInController {
                               @RequestParam String pass,
                               @RequestParam String confirm,
                               @RequestParam String role,
-                              Model model) {
+                              Model model,
+                              HttpServletRequest request) {
 
         User user;
         if (role.equals("u")) {
@@ -63,6 +67,8 @@ public class SignInController {
             return "signinForm";
         } else {
             userRepository.save(user);
+            HttpSession session = request.getSession();
+            session.setAttribute("id", userRepository.findByLogin(login).getId());
             if (role.equals("u")) {
                 return "user-logged";
             } else return "trainer-logged";

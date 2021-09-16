@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 // CRUD refers Create, Read, Update, Delete
 
 public interface TrainingRepository extends CrudRepository<Training, Integer> {
-
+    Training findByTrainingParticipantId(Integer id);
 }

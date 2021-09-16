@@ -30,15 +30,6 @@ public class TrainingController {
     private TrainingRepository trainingRepository;
     private List<Exercise> exercises = new ArrayList();
 
-    @GetMapping({"/addForm"})
-    public String showTrainingForm() {
-        return "trainingForm";
-    }
-
-    @PostMapping({"/create"})
-    public String trainingList(@RequestParam String name, @RequestParam String description) {
-        return "trainingForm";
-    }
 
     @PostMapping({"/save"})
     public String saveTraining() {
@@ -85,7 +76,7 @@ public class TrainingController {
         return "trainingForm";
     }
 
-    @PostMapping("/saveTraining")
+    @PostMapping("/save-exercises")
     @ResponseBody
     public String saveTraining(@RequestParam String login,
                                @RequestParam String name,
@@ -96,15 +87,24 @@ public class TrainingController {
                                @RequestParam int weeks,
                                @RequestParam int amount){
 
-        Training training = new Training();
 
+        Training training;
         TrainingParticipant trainingParticipant = trainingParticipantRepository.findByLogin(login);
+        Integer participantId = trainingParticipantRepository.findByLogin(login).getId();
+
+        if(trainingRepository.findByTrainingParticipantId(participantId) == null) {
+            training = new Training();
+        }else{
+            training = trainingRepository.findByTrainingParticipantId(participantId);
+        }
+
         training.setTrainingParticipant(trainingParticipant);
         training.setTrainingParticipant(trainingParticipantRepository.findByLogin(login));
         trainingParticipant.setTraining(training);
         List<Exercise> exercises = new ArrayList<>();
 
         Exercise exercise = new Exercise();
+
         exercise.setBasicWeight(weight);
         exercise.setName(name);
         exercise.setDescription(description);
@@ -112,9 +112,14 @@ public class TrainingController {
         exercise.setWeeksAmount(weeks);
         exercise.setProgress(progress);
         exercise.setSeriesAmount(series);
+        exercise.setTraining(training);
+
         exercises.add(exercise);
-        training.setExercises(exercises);
+
+        //nie zapisujemy ani ćwiczenia ani treningu
         trainingRepository.save(training);
+        exerciseRepository.save(exercise);
+
 
 
         return "saved";
