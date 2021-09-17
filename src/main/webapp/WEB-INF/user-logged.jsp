@@ -6,17 +6,25 @@
   Time: 10:16
   To change this template use File | Settings | File Templates.
 --%>
+<style><%@include file="/WEB-INF/css/logged.css"%></style>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Title</title>
 </head>
 <body>
-<h1>user</h1>
 
-<a href="/login/form">Wyloguj</a>
-<a href="/training/check">Sprawdź trening</a>
-<a href="/training/usermaxesForm">Podaj maksymalne udźwigi</a>
+
+<div class="container">
+<div class="menu">
+    <p>user</p>
+    <a href="/login/signout">Wyloguj</a>
+</div>
+    <div class="links">
+        <a href="/training/check">Sprawdź trening</a>
+        <a href="/training/usermaxesForm">Podaj maksymalne udźwigi</a>
+    </div>
+</div>
 
 </body>
 </html>

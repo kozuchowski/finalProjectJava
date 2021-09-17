@@ -2,10 +2,7 @@ package com.beef.beef.model;
 
 import lombok.Data;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("u")
@@ -22,4 +19,6 @@ public class TrainingParticipant extends User {
 
     @ManyToOne
     private Trainer trainer;
+
+    private boolean waitingForTraining;
 }

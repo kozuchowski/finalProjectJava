@@ -28,21 +28,32 @@ public class LogInController {
 
 
     @GetMapping("/form")
-    public String logIn(HttpServletRequest request){
+    public String logIn(){
+
+        return "loginForm";
+    }
+
+    @GetMapping("/signout")
+    public String signOut(HttpServletRequest request){
         HttpSession session = request.getSession();
         if(!session.isNew()){
             session.invalidate();
         }
 
-        return "loginForm";
+        return "index";
     }
+
     @GetMapping("/back")
-    public String backToLogIn(HttpServletRequest request){
+    public String backToLogIn(HttpServletRequest request, Model model){
         HttpSession session = request.getSession();
         User user = userRepository.findByLogin(String.valueOf(session.getAttribute("login")));
         if(user instanceof TrainingParticipant) {
             return "user-logged";
         }else {
+            Trainer trainer = (Trainer) user;
+            List<TrainingParticipant> selected = trainer.getUsers();
+
+            model.addAttribute("users", selected);
             return "trainer-logged";
         }
     }

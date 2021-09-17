@@ -1,0 +1,40 @@
+*{
+    box-sizing: border-box;
+}
+
+
+body{
+    font-family: Helvetica;
+    font-size: 1rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.menu{
+    font-size: 2rem;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+}
+
+ a , a:active{
+    text-decoration: none;
+    margin: 40px;
+    color: cornflowerblue;
+
+}
+
+.container{
+    background: black;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 50%;
+    border-radius: 5px;
+
+}

@@ -5,7 +5,7 @@ import com.beef.beef.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -68,11 +68,15 @@ public class TrainingController {
         User user = this.userRepository.findById(Integer.parseInt(String.valueOf(session.getAttribute("id"))));
         Trainer trainer = trainerRepository.findByLogin(trainerLogin);
 
+
             TrainingParticipant trainingParticipant = (TrainingParticipant)user;
             trainingParticipant.setDeadlift(deadlift);
             trainingParticipant.setSquat(squat);
             trainingParticipant.setBenchpress(benchpress);
+
+            trainingParticipant.setWaitingForTraining(true);
             trainingParticipant.setTrainer(trainer);
+
             this.userRepository.save(trainingParticipant);
             return "user-logged";
 
@@ -112,6 +116,7 @@ public class TrainingController {
 
         training.setTrainingParticipant(trainingParticipant);
 
+        trainingParticipant.setWaitingForTraining(false);
         trainingParticipant.setTraining(training);
         List<Exercise> exercises = new ArrayList<>();
 

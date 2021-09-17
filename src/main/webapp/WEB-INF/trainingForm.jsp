@@ -6,6 +6,7 @@
   Time: 07:57
   To change this template use File | Settings | File Templates.
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -13,23 +14,25 @@
 </head>
 <body>
 <a href="/login/back">Wróć</a>
-<a href="/login/form">Wyloguj</a>
+<a href="/login/signout">Wyloguj</a>
 <h2>Dodaj ćwiczenia</h2>
+https://us05web.zoom.us/j/8755612739?pwd=NWxPbDlDa1pRcDMwbG1RUUNNNXhldz09
+<div class="container">
+    <form method="post" action="/training/save-exercises">
+        <input type="text" value="${login}" name="login" hidden>
+        <label>Nazwa ćwiczenia<input type="text" name="name"></label>
+        <label>Opis ćwiczenia<input type="textarea" name="description" rows="4" cols="50"></label>
+        <label>Ciężar początkowy<input type="number" name="weight"></label>
+        <label>Progres między seriami<input type="number" name="progress"></label>
+        <label>Ilość serii<input type="number" name="series"></label>
+        <label>Ilość powtórzeń<input type="number" name="amount"></label>
+        <label>Ilość tygodni<input type="number" name="weeks"></label>
+        <label>Dodawaj kolejne<input type="radio" name="end" value="true" checked> </label>
+        <label>Zakończ<input type="radio" name="end" value="false"> </label>
+        <input type="submit" value="Zapisz">
 
-<form method="post" action="/training/save-exercises">
-    <input type="text" value="${login}" name="login" hidden>
-    <label>Nazwa ćwiczenia<input type="text" name="name"></label>
-    <label>Opis ćwiczenia<input type="" name="description"></label>
-    <label>Ciężar początkowy<input type="number" name="weight"></label>
-    <label>Progres między seriami<input type="number" name="progress"></label>
-    <label>Ilość serii<input type="number" name="series"></label>
-    <label>Ilość powtórzeń<input type="number" name="amount"></label>
-    <label>Ilość tygodni<input type="number" name="weeks"></label>
-    <label>Dodawaj kolejne<input type="radio" name="end" value="true" checked> </label>
-    <label>Zakończ<input type="radio" name="end" value="false"> </label>
-    <input type="submit" value="Zapisz">
-
-</form>
+    </form>
+</div>
 
 </body>
 </html>
