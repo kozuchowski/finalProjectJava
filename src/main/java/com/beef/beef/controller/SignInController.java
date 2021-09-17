@@ -69,9 +69,13 @@ public class SignInController {
             userRepository.save(user);
             HttpSession session = request.getSession();
             session.setAttribute("id", userRepository.findByLogin(login).getId());
+            session.setAttribute("login", login);
             if (role.equals("u")) {
                 return "user-logged";
-            } else return "trainer-logged";
+            } else {
+
+                 return "trainer-logged";
+            }
         }
     }
 

@@ -5,7 +5,6 @@ import com.beef.beef.model.TrainingParticipant;
 import com.beef.beef.model.User;
 import com.beef.beef.model.Trainer;
 import com.beef.beef.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/login")
-//@RequiredArgsConstructor
 public class LogInController {
 
     @Autowired
@@ -29,8 +28,23 @@ public class LogInController {
 
 
     @GetMapping("/form")
-    public String logIn(){
+    public String logIn(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        if(!session.isNew()){
+            session.invalidate();
+        }
+
         return "loginForm";
+    }
+    @GetMapping("/back")
+    public String backToLogIn(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        User user = userRepository.findByLogin(String.valueOf(session.getAttribute("login")));
+        if(user instanceof TrainingParticipant) {
+            return "user-logged";
+        }else {
+            return "trainer-logged";
+        }
     }
 
     @PostMapping("/check")
@@ -57,11 +71,13 @@ public class LogInController {
         }else {
             HttpSession session = request.getSession();
             session.setAttribute("id", userRepository.findByLogin(login).getId());
+            session.setAttribute("login", login);
             if(user instanceof TrainingParticipant) {
                 return "user-logged";
             } else {
                 Trainer trainer = (Trainer) user;
                 List<TrainingParticipant> selected = trainer.getUsers();
+
                 model.addAttribute("users", selected);
                 return "trainer-logged";
 

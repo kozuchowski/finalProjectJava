@@ -12,6 +12,8 @@
     <title>Title</title>
 </head>
 <body>
+<a href="/login/back">Wróć</a>
+<a href="/login/form">Wyloguj</a>
 <h2>Dodaj ćwiczenia</h2>
 
 <form method="post" action="/training/save-exercises">
@@ -23,8 +25,10 @@
     <label>Ilość serii<input type="number" name="series"></label>
     <label>Ilość powtórzeń<input type="number" name="amount"></label>
     <label>Ilość tygodni<input type="number" name="weeks"></label>
-
+    <label>Dodawaj kolejne<input type="radio" name="end" value="true" checked> </label>
+    <label>Zakończ<input type="radio" name="end" value="false"> </label>
     <input type="submit" value="Zapisz">
+
 </form>
 
 </body>

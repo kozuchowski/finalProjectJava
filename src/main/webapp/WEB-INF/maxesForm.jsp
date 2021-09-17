@@ -12,6 +12,8 @@
     <title>Title</title>
 </head>
 <body>
+<a href="/login/back">Wróć</a>
+<a href="/login/form">Wyloguj</a>
 <h1>formularz do maxów</h1>
 
 <form method="post" action="/training/usermaxes">

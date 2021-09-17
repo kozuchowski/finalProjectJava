@@ -13,19 +13,28 @@
 </head>
 <body>
     <h1>trainer</h1>
+    <a href="/login/form">Wyloguj</a>
     <h2>Tutaj wyświetl użytkowników oczekujących na trening</h2>
+    <c:if test="${users == null}">
+        <h1>Nie ma nikogo do wyświetlenia</h1>
+    </c:if>
+
+
 
 
     <table>
         <c:forEach items="${users}" var="user">
-            <tr>
-                <td><a href="/training/create?login=${user.login}"> ${user.login}</a></td>
-            </tr>
-            <tr>
-                <td>Martwy ciąg: ${user.deadlift}</td>
-                <td>Przysiad: ${user.squat}</td>
-                <td>Wyciskanie sztangi: ${user.benchpress}</td>
-            </tr>
+            <c:if test="${user.training.id == null}">
+                <tr>
+                    <td><a href="/training/create?login=${user.login}"> ${user.login}</a></td>
+                </tr>
+                <tr>
+                    <td>Martwy ciąg: ${user.deadlift}</td>
+                    <td>Przysiad: ${user.squat}</td>
+                    <td>Wyciskanie sztangi: ${user.benchpress}</td>
+                </tr>
+            </c:if>
+
         </c:forEach>
     </table>
 

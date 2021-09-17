@@ -13,6 +13,8 @@
 </head>
 <body>
 <h1>user</h1>
+
+<a href="/login/form">Wyloguj</a>
 <a href="/training/check">Sprawdź trening</a>
 <a href="/training/usermaxesForm">Podaj maksymalne udźwigi</a>
 

@@ -5,6 +5,7 @@ import com.beef.beef.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -32,12 +33,21 @@ public class TrainingController {
 
 
     @PostMapping({"/save"})
-    public String saveTraining() {
+    public String save() {
         return "trainer-logged";
     }
 
     @GetMapping({"/check"})
-    public String checkIfTrainingExist() {
+    public String checkIfTrainingExist(HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        TrainingParticipant trainingParticipant = trainingParticipantRepository.
+                findByLogin(String.valueOf(session.getAttribute("login")));
+
+        Training training = trainingParticipant.getTraining();
+
+        model.addAttribute("training", training);
+
         return "training";
     }
 
@@ -77,17 +87,19 @@ public class TrainingController {
     }
 
     @PostMapping("/save-exercises")
-    @ResponseBody
-    public String saveTraining(@RequestParam String login,
+
+    public String saveExercise(@RequestParam String login,
                                @RequestParam String name,
                                @RequestParam String description,
                                @RequestParam int weight,
                                @RequestParam int progress,
                                @RequestParam int series,
                                @RequestParam int weeks,
-                               @RequestParam int amount){
+                               @RequestParam int amount,
+                               @RequestParam String end,
+                               Model model){
 
-
+        model.addAttribute("login", login);
         Training training;
         TrainingParticipant trainingParticipant = trainingParticipantRepository.findByLogin(login);
         Integer participantId = trainingParticipantRepository.findByLogin(login).getId();
@@ -99,7 +111,7 @@ public class TrainingController {
         }
 
         training.setTrainingParticipant(trainingParticipant);
-        training.setTrainingParticipant(trainingParticipantRepository.findByLogin(login));
+
         trainingParticipant.setTraining(training);
         List<Exercise> exercises = new ArrayList<>();
 
@@ -116,13 +128,18 @@ public class TrainingController {
 
         exercises.add(exercise);
 
-        //nie zapisujemy ani ćwiczenia ani treningu
         trainingRepository.save(training);
         exerciseRepository.save(exercise);
 
+        if(end.equals("true")){
+            return "trainingForm";
+        }
 
+        Trainer trainer = trainingParticipant.getTrainer();
+        List<TrainingParticipant> selected = trainer.getUsers();
 
-        return "saved";
+        model.addAttribute("users", selected);
+        return "trainer-logged";
     }
 
 

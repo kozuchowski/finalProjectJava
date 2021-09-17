@@ -13,6 +13,25 @@
 </head>
 <body>
 <h1>trening</h1>
-<h1>${nothingToShow}</h1>
+
+<a href="/login/back">Wróć</a>
+<a href="/login/form">Wyloguj</a>
+<c:if test="${training == null}">
+    <h2>Nie masz jeszcze treningu</h2>
+</c:if>
+    <table>
+        <c:forEach items="${training.exercises}" var="exercise">
+            <c:if test="${exercise != null}">
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>${exercise.name}</td>
+                </tr>
+            </c:if>
+
+        </c:forEach>
+    </table>
+
 </body>
 </html>
