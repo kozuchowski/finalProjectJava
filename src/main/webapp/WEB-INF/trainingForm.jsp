@@ -6,7 +6,7 @@
   Time: 07:57
   To change this template use File | Settings | File Templates.
 --%>
-
+<style><%@include file="/WEB-INF/css/trainingForm.css"%></style>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -16,7 +16,6 @@
 <a href="/login/back">Wróć</a>
 <a href="/login/signout">Wyloguj</a>
 <h2>Dodaj ćwiczenia</h2>
-https://us05web.zoom.us/j/8755612739?pwd=NWxPbDlDa1pRcDMwbG1RUUNNNXhldz09
 <div class="container">
     <form method="post" action="/training/save-exercises">
         <input type="text" value="${login}" name="login" hidden>

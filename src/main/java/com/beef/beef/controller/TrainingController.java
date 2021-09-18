@@ -101,8 +101,9 @@ public class TrainingController {
                                @RequestParam int weeks,
                                @RequestParam int amount,
                                @RequestParam String end,
-                               Model model){
-
+                               Model model,
+                               HttpServletRequest request){
+        HttpSession session = request.getSession();
         model.addAttribute("login", login);
         Training training;
         TrainingParticipant trainingParticipant = trainingParticipantRepository.findByLogin(login);
@@ -142,7 +143,7 @@ public class TrainingController {
 
         Trainer trainer = trainingParticipant.getTrainer();
         List<TrainingParticipant> selected = trainer.getUsers();
-
+        session.setAttribute("users", selected);
         model.addAttribute("users", selected);
         return "trainer-logged";
     }
