@@ -20,7 +20,7 @@
     <form method="post" action="/training/save-exercises">
         <input type="text" value="${login}" name="login" hidden>
         <label>Nazwa ćwiczenia<input type="text" name="name"></label>
-        <label>Opis ćwiczenia<input type="textarea" name="description" rows="4" cols="50"></label>
+        <label>Opis ćwiczenia<input type="text" name="description" rows="4" cols="50"></label>
         <label>Ciężar początkowy<input type="number" name="weight"></label>
         <label>Progres między seriami<input type="number" name="progress"></label>
         <label>Ilość serii<input type="number" name="series"></label>

@@ -17,19 +17,30 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping({"/training"})
-@RequiredArgsConstructor
 public class TrainingController {
-    @Autowired
+
     private UserRepository userRepository;
-    @Autowired
     private final TrainerRepository trainerRepository;
-    @Autowired
     private ExerciseRepository exerciseRepository;
-    @Autowired
     private TrainingParticipantRepository trainingParticipantRepository;
-    @Autowired
     private TrainingRepository trainingRepository;
     private List<Exercise> exercises = new ArrayList();
+
+    @Autowired
+    public TrainingController(UserRepository userRepository,
+                              TrainerRepository trainerRepository,
+                              ExerciseRepository exerciseRepository,
+                              TrainingParticipantRepository trainingParticipantRepository,
+                              TrainingRepository trainingRepository) {
+        this.userRepository = userRepository;
+        this.trainerRepository = trainerRepository;
+        this.exerciseRepository = exerciseRepository;
+        this.trainingParticipantRepository = trainingParticipantRepository;
+        this.trainingRepository = trainingRepository;
+    }
+
+
+
 
 
     @PostMapping({"/save"})
