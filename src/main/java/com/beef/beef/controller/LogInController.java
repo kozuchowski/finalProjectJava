@@ -4,7 +4,6 @@ import com.beef.beef.Service.LoginServiceImpl;
 import com.beef.beef.model.TrainingParticipant;
 import com.beef.beef.model.User;
 import com.beef.beef.model.Trainer;
-import com.beef.beef.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +20,12 @@ import java.util.List;
 @RequestMapping("/login")
 public class LogInController {
 
-
-    private UserRepository userRepository;
     private LoginServiceImpl loginServiceImpl;
+    private User user;
 
     @Autowired
-    public LogInController(UserRepository userRepository, LoginServiceImpl loginServiceImpl) {
-        this.userRepository = userRepository;
+    public LogInController(LoginServiceImpl loginServiceImpl) {
+
         this.loginServiceImpl = loginServiceImpl;
     }
 
@@ -48,8 +46,8 @@ public class LogInController {
 
     @GetMapping("/back")
     public String backToLogIn(HttpSession session, Model model){
-git checkout
-        User user = userRepository.findByLogin(String.valueOf(session.getAttribute("login")));
+
+        user = loginServiceImpl.getUserFromDataBase(session.getAttribute("login").toString());
         if(user instanceof TrainingParticipant) {
             return "user-logged";
         }else {
@@ -62,13 +60,13 @@ git checkout
     }
 
     @PostMapping("/check")
-    public String loginUser (@RequestParam String login,
+    public String logInUser (@RequestParam String login,
                              @RequestParam String pass,
                              Model model,
                              HttpSession session){
         String error = "";
 
-        User user = userRepository.findByLogin(login);
+        user = loginServiceImpl.getUserFromDataBase(login);
 
         if(user == null){
             model.addAttribute("error", "Niepoprawny login");
@@ -78,12 +76,13 @@ git checkout
         if(!pass.equals(user.getPassword())){
             error = "Niepoprawny login lub hasło";
         }
-
+        // Dlaczego to działa skoro nie ma return statement?
+        // Jak to wydzielić?
         if(!error.equals("")){
             model.addAttribute("error", error);
             return "loginForm";
         }else {
-            session.setAttribute("id", userRepository.findByLogin(login).getId());
+            session.setAttribute("id", user.getId());
             session.setAttribute("login", login);
             if(user instanceof TrainingParticipant) {
                 return "user-logged";
@@ -92,8 +91,8 @@ git checkout
                 List<TrainingParticipant> selected = trainer.getUsers();
 
                 session.setAttribute("users", selected);
-                return "trainer-logged";
 
+                return "trainer-logged";
             }
         }
     }
