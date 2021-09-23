@@ -1,18 +1,17 @@
 package com.beef.beef.controller;
 
-
+import com.beef.beef.Service.LoginServiceImpl;
 import com.beef.beef.model.TrainingParticipant;
 import com.beef.beef.model.User;
 import com.beef.beef.model.Trainer;
 import com.beef.beef.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletRequest;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -24,10 +23,14 @@ public class LogInController {
 
 
     private UserRepository userRepository;
+    private LoginServiceImpl loginServiceImpl;
 
-    public LogInController(UserRepository userRepository) {
+    @Autowired
+    public LogInController(UserRepository userRepository, LoginServiceImpl loginServiceImpl) {
         this.userRepository = userRepository;
+        this.loginServiceImpl = loginServiceImpl;
     }
+
 
     @GetMapping("/form")
     public String logIn(){
@@ -36,18 +39,16 @@ public class LogInController {
     }
 
     @GetMapping("/logout")
-    public String logOut(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        if(!session.isNew()){
-            session.invalidate();
-        }
+    public String logOut(HttpSession session){
 
+        loginServiceImpl.sessionInvalidate(session);
         return "index";
     }
 
+
     @GetMapping("/back")
-    public String backToLogIn(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession();
+    public String backToLogIn(HttpSession session, Model model){
+
         User user = userRepository.findByLogin(String.valueOf(session.getAttribute("login")));
         if(user instanceof TrainingParticipant) {
             return "user-logged";
@@ -64,7 +65,7 @@ public class LogInController {
     public String loginUser (@RequestParam String login,
                              @RequestParam String pass,
                              Model model,
-                             HttpServletRequest request){
+                             HttpSession session){
         String error = "";
 
         User user = userRepository.findByLogin(login);
@@ -82,7 +83,6 @@ public class LogInController {
             model.addAttribute("error", error);
             return "loginForm";
         }else {
-            HttpSession session = request.getSession();
             session.setAttribute("id", userRepository.findByLogin(login).getId());
             session.setAttribute("login", login);
             if(user instanceof TrainingParticipant) {

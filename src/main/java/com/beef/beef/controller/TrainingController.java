@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class TrainingController {
     private TrainingRepository trainingRepository;
     private List<Exercise> exercises = new ArrayList();
 
-
+    @Autowired
     public TrainingController(UserRepository userRepository,
                               TrainerRepository trainerRepository,
                               ExerciseRepository exerciseRepository,
@@ -47,9 +48,8 @@ public class TrainingController {
     }
 
     @GetMapping({"/check"})
-    public String checkIfTrainingExist(HttpServletRequest request, Model model) {
+    public String checkIfTrainingExist(HttpSession session, Model model) {
 
-        HttpSession session = request.getSession();
         TrainingParticipant trainingParticipant = trainingParticipantRepository.
                 findByLogin(String.valueOf(session.getAttribute("login")));
 
@@ -72,8 +72,8 @@ public class TrainingController {
                                 @RequestParam int squat,
                                 @RequestParam int benchpress,
                                 @RequestParam String trainerLogin,
-                                HttpServletRequest request) {
-        HttpSession session = request.getSession();
+                                HttpSession session) {
+
         User user = this.userRepository.findById(Integer.parseInt(String.valueOf(session.getAttribute("id"))));
         Trainer trainer = trainerRepository.findByLogin(trainerLogin);
 
@@ -111,12 +111,13 @@ public class TrainingController {
                                @RequestParam int amount,
                                @RequestParam String end,
                                Model model,
-                               HttpServletRequest request){
-        HttpSession session = request.getSession();
+                               HttpSession session){
+
         model.addAttribute("login", login);
         Training training;
         TrainingParticipant trainingParticipant = trainingParticipantRepository.findByLogin(login);
         Integer participantId = trainingParticipantRepository.findByLogin(login).getId();
+
 
         if(trainingRepository.findByTrainingParticipantId(participantId) == null) {
             training = new Training();
