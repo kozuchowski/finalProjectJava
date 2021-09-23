@@ -39,4 +39,15 @@ public class SignInServiceImpl implements SignInService{
         session.setAttribute("id", userRepository.findByLogin(login).getId());
         session.setAttribute("login", login);
     }
+
+    @Override
+    public User checkIfUserExists(String login){
+        User user;
+        if((user = userRepository.findByLogin(login)) != null){
+            return user;
+        }
+        return null;
+    }
+
+
 }

@@ -9,4 +9,5 @@ import javax.servlet.http.HttpSession;
 public interface SignInService {
     boolean loginAndPasswordValidation(String passError, String loginError, Model model);
     void saveUser(User user, String login, HttpSession session );
+    User checkIfUserExists(String login);
 }

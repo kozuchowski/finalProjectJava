@@ -19,11 +19,10 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/signin")
 public class SignInController {
 
-    private UserRepository userRepository;
     private SignInServiceImpl signInService;
 
-    public SignInController(UserRepository userRepository, SignInServiceImpl signInService) {
-        this.userRepository = userRepository;
+    public SignInController(SignInServiceImpl signInService) {
+
         this.signInService = signInService;
     }
 
@@ -60,7 +59,7 @@ public class SignInController {
 
         }
 
-        if (login.matches(loginPattern) && userRepository.findByLogin(login) == null) {
+        if (login.matches(loginPattern) && signInService.checkIfUserExists(login) == null) {
             user.setLogin(login);
         } else {
             loginError = " Niepoprawny login";
@@ -71,6 +70,7 @@ public class SignInController {
             model.addAttribute("loginError", loginError);
             return "signinForm";
         } else {
+
             signInService.saveUser(user, login, session);
             if (role.equals("u")) {
                 return "user-logged";
