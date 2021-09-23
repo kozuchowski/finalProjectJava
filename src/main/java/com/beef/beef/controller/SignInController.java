@@ -1,6 +1,7 @@
 package com.beef.beef.controller;
 
 
+import com.beef.beef.Service.SignInServiceImpl;
 import com.beef.beef.model.TrainingParticipant;
 import com.beef.beef.model.Trainer;
 import com.beef.beef.model.User;
@@ -12,17 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/signin")
 public class SignInController {
 
-    private UserRepository userRepository;
+    private SignInServiceImpl signInService;
 
-    public SignInController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public SignInController(SignInServiceImpl signInService) {
+
+        this.signInService = signInService;
     }
 
     @GetMapping("/form")
@@ -36,7 +37,7 @@ public class SignInController {
                               @RequestParam String confirm,
                               @RequestParam String role,
                               Model model,
-                              HttpServletRequest request) {
+                              HttpSession session) {
 
         User user;
         if (role.equals("u")) {
@@ -58,28 +59,25 @@ public class SignInController {
 
         }
 
-        if (login.matches(loginPattern) && userRepository.findByLogin(login) == null) {
+        if (login.matches(loginPattern) && signInService.checkIfUserExists(login) == null) {
             user.setLogin(login);
         } else {
             loginError = " Niepoprawny login";
         }
 
-        if (!passError.equals("") || !loginError.equals("")) {
+        if (!signInService.loginAndPasswordValidation(passError, loginError, model)) {
             model.addAttribute("passError", passError);
             model.addAttribute("loginError", loginError);
             return "signinForm";
         } else {
-            userRepository.save(user);
-            HttpSession session = request.getSession();
-            session.setAttribute("id", userRepository.findByLogin(login).getId());
-            session.setAttribute("login", login);
 
+            signInService.saveUser(user, login, session);
             if (role.equals("u")) {
                 return "user-logged";
-            } else {
-                return "trainer-logged";
             }
         }
+        return "trainer-logged";
     }
+
 
 }
