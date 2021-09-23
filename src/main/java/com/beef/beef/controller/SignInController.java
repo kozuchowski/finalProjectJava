@@ -71,11 +71,7 @@ public class SignInController {
             model.addAttribute("loginError", loginError);
             return "signinForm";
         } else {
-            userRepository.save(user);
-
-            session.setAttribute("id", userRepository.findByLogin(login).getId());
-            session.setAttribute("login", login);
-
+            signInService.saveUser(user, login, session);
             if (role.equals("u")) {
                 return "user-logged";
             }
