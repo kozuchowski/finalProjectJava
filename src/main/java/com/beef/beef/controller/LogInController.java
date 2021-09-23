@@ -48,8 +48,8 @@ public class LogInController {
 
     @GetMapping("/back")
     public String backToLogIn(HttpSession session, Model model){
-
-        User user = userRepository.findByLogin(String.valueOf(session.getAttribute("login")));
+        // Zostawiłbym to jak jest
+        User user = userRepository.findByLogin(session.getAttribute("login").toString());
         if(user instanceof TrainingParticipant) {
             return "user-logged";
         }else {
@@ -62,7 +62,7 @@ public class LogInController {
     }
 
     @PostMapping("/check")
-    public String loginUser (@RequestParam String login,
+    public String logInUser (@RequestParam String login,
                              @RequestParam String pass,
                              Model model,
                              HttpSession session){
@@ -78,7 +78,8 @@ public class LogInController {
         if(!pass.equals(user.getPassword())){
             error = "Niepoprawny login lub hasło";
         }
-
+        // Dlaczego to działa skoro nie ma return statement?
+        // Jak to wydzielić?
         if(!error.equals("")){
             model.addAttribute("error", error);
             return "loginForm";
@@ -92,8 +93,8 @@ public class LogInController {
                 List<TrainingParticipant> selected = trainer.getUsers();
 
                 session.setAttribute("users", selected);
-                return "trainer-logged";
 
+                return "trainer-logged";
             }
         }
     }
