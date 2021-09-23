@@ -48,7 +48,7 @@ public class LogInController {
 
     @GetMapping("/back")
     public String backToLogIn(HttpSession session, Model model){
-
+git checkout
         User user = userRepository.findByLogin(String.valueOf(session.getAttribute("login")));
         if(user instanceof TrainingParticipant) {
             return "user-logged";
