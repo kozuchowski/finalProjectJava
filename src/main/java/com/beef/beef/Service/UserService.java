@@ -1,2 +1,4 @@
-package com.beef.beef.Service;public interface UserService {
+package com.beef.beef.Service;
+
+public interface UserService {
 }

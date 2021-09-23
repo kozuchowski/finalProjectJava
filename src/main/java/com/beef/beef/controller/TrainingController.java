@@ -9,8 +9,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +24,7 @@ public class TrainingController {
     private TrainingRepository trainingRepository;
     private List<Exercise> exercises = new ArrayList();
 
-    @Autowired
+
     public TrainingController(UserRepository userRepository,
                               TrainerRepository trainerRepository,
                               ExerciseRepository exerciseRepository,
@@ -62,7 +60,7 @@ public class TrainingController {
         return "training";
     }
 
-    @GetMapping({"/usermaxesForm"})
+    @GetMapping({"/usermaxes-form"})
     public String showMaxesForm(Model model) {
         List<Trainer> treners = trainerRepository.findAll();
         model.addAttribute("users", treners);

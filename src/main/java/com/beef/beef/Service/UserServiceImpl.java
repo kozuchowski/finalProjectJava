@@ -1,2 +1,4 @@
-package com.beef.beef.Service;public class UserServiceImpl {
+package com.beef.beef.Service;
+
+public class UserServiceImpl implements UserService{
 }

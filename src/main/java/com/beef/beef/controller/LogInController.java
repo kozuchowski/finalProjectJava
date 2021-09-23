@@ -5,7 +5,6 @@ import com.beef.beef.model.TrainingParticipant;
 import com.beef.beef.model.User;
 import com.beef.beef.model.Trainer;
 import com.beef.beef.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +22,12 @@ import java.util.List;
 @RequestMapping("/login")
 public class LogInController {
 
-    @Autowired
+
     private UserRepository userRepository;
 
+    public LogInController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/form")
     public String logIn(){
@@ -33,8 +35,8 @@ public class LogInController {
         return "loginForm";
     }
 
-    @GetMapping("/signout")
-    public String signOut(HttpServletRequest request){
+    @GetMapping("/logout")
+    public String logOut(HttpServletRequest request){
         HttpSession session = request.getSession();
         if(!session.isNew()){
             session.invalidate();
@@ -89,7 +91,7 @@ public class LogInController {
                 Trainer trainer = (Trainer) user;
                 List<TrainingParticipant> selected = trainer.getUsers();
 
-                model.addAttribute("users", selected);
+                session.setAttribute("users", selected);
                 return "trainer-logged";
 
             }
