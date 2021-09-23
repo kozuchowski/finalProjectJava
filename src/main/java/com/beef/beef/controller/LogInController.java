@@ -47,7 +47,6 @@ public class LogInController {
     @GetMapping("/back")
     public String backToLogIn(HttpSession session, Model model){
 
-        user = loginServiceImpl.getUserFromDataBase(session.getAttribute("login").toString());
         if(user instanceof TrainingParticipant) {
             return "user-logged";
         }else {
@@ -76,8 +75,7 @@ public class LogInController {
         if(!pass.equals(user.getPassword())){
             error = "Niepoprawny login lub hasło";
         }
-        // Dlaczego to działa skoro nie ma return statement?
-        // Jak to wydzielić?
+
         if(!error.equals("")){
             model.addAttribute("error", error);
             return "loginForm";
