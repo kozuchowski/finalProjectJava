@@ -4,7 +4,6 @@ import com.beef.beef.Service.LoginServiceImpl;
 import com.beef.beef.model.TrainingParticipant;
 import com.beef.beef.model.User;
 import com.beef.beef.model.Trainer;
-import com.beef.beef.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +20,12 @@ import java.util.List;
 @RequestMapping("/login")
 public class LogInController {
 
-
-    private UserRepository userRepository;
     private LoginServiceImpl loginServiceImpl;
+    private User user;
 
     @Autowired
-    public LogInController(UserRepository userRepository, LoginServiceImpl loginServiceImpl) {
-        this.userRepository = userRepository;
+    public LogInController(LoginServiceImpl loginServiceImpl) {
+
         this.loginServiceImpl = loginServiceImpl;
     }
 
@@ -48,8 +46,8 @@ public class LogInController {
 
     @GetMapping("/back")
     public String backToLogIn(HttpSession session, Model model){
-        // Zostawiłbym to jak jest
-        User user = userRepository.findByLogin(session.getAttribute("login").toString());
+
+        user = loginServiceImpl.getUserFromDataBase(session.getAttribute("login").toString());
         if(user instanceof TrainingParticipant) {
             return "user-logged";
         }else {
@@ -68,7 +66,7 @@ public class LogInController {
                              HttpSession session){
         String error = "";
 
-        User user = userRepository.findByLogin(login);
+        user = loginServiceImpl.getUserFromDataBase(login);
 
         if(user == null){
             model.addAttribute("error", "Niepoprawny login");
@@ -84,7 +82,7 @@ public class LogInController {
             model.addAttribute("error", error);
             return "loginForm";
         }else {
-            session.setAttribute("id", userRepository.findByLogin(login).getId());
+            session.setAttribute("id", user.getId());
             session.setAttribute("login", login);
             if(user instanceof TrainingParticipant) {
                 return "user-logged";
