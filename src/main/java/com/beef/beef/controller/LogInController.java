@@ -1,6 +1,6 @@
 package com.beef.beef.controller;
 
-import com.beef.beef.Service.LoginServiceImpl;
+import com.beef.beef.Service.LoginService;
 import com.beef.beef.model.TrainingParticipant;
 import com.beef.beef.model.User;
 import com.beef.beef.model.Trainer;
@@ -20,13 +20,13 @@ import java.util.List;
 @RequestMapping("/login")
 public class LogInController {
 
-    private LoginServiceImpl loginServiceImpl;
+    private LoginService loginService;
     private User user;
 
     @Autowired
-    public LogInController(LoginServiceImpl loginServiceImpl) {
+    public LogInController(LoginService loginService) {
 
-        this.loginServiceImpl = loginServiceImpl;
+        this.loginService = loginService;
     }
 
 
@@ -39,7 +39,7 @@ public class LogInController {
     @GetMapping("/logout")
     public String logOut(HttpSession session){
 
-        loginServiceImpl.sessionInvalidate(session);
+        loginService.sessionInvalidate(session);
         return "index";
     }
 
@@ -65,7 +65,7 @@ public class LogInController {
                              HttpSession session){
         String error = "";
 
-        user = loginServiceImpl.getUserFromDataBase(login);
+        user = loginService.getUserFromDataBase(login);
 
         if(user == null){
             model.addAttribute("error", "Niepoprawny login");

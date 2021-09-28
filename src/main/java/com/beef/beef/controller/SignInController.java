@@ -1,11 +1,11 @@
 package com.beef.beef.controller;
 
 
-import com.beef.beef.Service.SignInServiceImpl;
+import com.beef.beef.Service.SignInService;
 import com.beef.beef.model.TrainingParticipant;
 import com.beef.beef.model.Trainer;
 import com.beef.beef.model.User;
-import com.beef.beef.repository.UserRepository;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +19,9 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/signin")
 public class SignInController {
 
-    private SignInServiceImpl signInService;
+    private SignInService signInService;
 
-    public SignInController(SignInServiceImpl signInService) {
+    public SignInController(SignInService signInService) {
 
         this.signInService = signInService;
     }
